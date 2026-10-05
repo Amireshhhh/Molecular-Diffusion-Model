@@ -18,7 +18,7 @@ by a smoke test that runs on CPU with no download; only full training needs a GP
 4. **Evaluation:** infers bonds from geometry (covalent radii), builds RDKit molecules,
    reports validity / uniqueness / novelty — exactly what EDM and successors report on QM9.
 
-## Honest scope — read this
+## Scope 
 
 - **Non-equivariant by design.** State-of-the-art molecular diffusion (EDM, Hoogeboom et al.
   2022) uses an **E(3)-equivariant** GNN so that rotating or translating a molecule doesn't
@@ -28,7 +28,7 @@ by a smoke test that runs on CPU with no download; only full training needs a GP
   EGNN denoiser is the principled next step**, and it drops into the same diffusion/eval
   scaffold unchanged. Everything else here (the diffusion process, the ε-prediction
   objective, sampling, the metrics) is identical to the real approach.
-- **Numbers come from your GPU run.** This repo was verified for *correctness* on CPU
+- **Numbers on your GPU run.** This repo was verified for *correctness* on CPU
   (the diffusion math, a learning train step, real-molecule loading, and that the metrics
   score real molecules valid and noise invalid). It was **not** trained to convergence
   here — that needs a GPU. Do not quote generation-quality numbers until you've run it.
@@ -45,7 +45,7 @@ The smoke run's generated molecules score ~0 validity **on purpose** — a 3-epo
 128 toy molecules hasn't learned anything. The same evaluator scores real molecules at
 1.0 validity (checked in `smoke_test`), so both the pipeline and the metric are proven.
 
-## Train for real (free Colab GPU)
+## Train for real!!
 
 ```bash
 python -m scripts.train --data qm9 --qm9_limit 20000 --epochs 200 --batch 256
@@ -63,15 +63,6 @@ raise it or remove it with more compute. See `notebook.ipynb` for a ready Colab 
 - `src/data.py` — QM9 loader (+ RDKit synthetic fallback for offline testing).
 - `src/evaluate.py` — bond inference + validity/uniqueness/novelty metrics.
 - `scripts/train.py`, `scripts/sample.py`, `scripts/smoke_test.py`.
-
-## Why this project (for a GenAI4Science application)
-
-Molecular generative modeling is the exact GenAI4Science domain. This project demonstrates,
-in defensible code: the diffusion framework end to end, the 3D-molecule representation, the
-QM9 benchmark, and the field's evaluation protocol. The mathematical backbone — a
-noising/denoising process over a continuous space — connects directly to optimal-transport
-formulations of generative modeling (flow matching, Schrödinger bridges), which is the
-natural theory extension to discuss alongside it.
 
 ## References
 
